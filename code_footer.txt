@@ -1,0 +1,5 @@
+krushkal(v,e,s,d,c);
+prims(v,e,s,d,c);
+boruvka(v,e,s,d,c);
+reversedelete(v,e,s,d,c);
+}
