@@ -36,10 +36,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
       {
         global $result;
-        $out="./a.exe";
-        $CC="g++ --std=c++11";
+        $out="timeout 3 ./a.out";
+        $CC="timeout 3 g++ --std=c++11";
         $filename_code = "main.cpp";
-        $command=$CC." ".$filename_code;
+        $command=$CC." -lm ".$filename_code;
         $code1 = "code_header.txt";
         $code2 = "code_footer.txt";
 
@@ -77,39 +77,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $file_code=fopen($filename_code,"w+");
             fwrite($file_code,$code);
             fclose($file_code);
-putenv("PATH=C:\MinGW\bin");
-          shell_exec("g++ --std=c++11 main.cpp");
-$out=shell_exec("a.exe");
-          print_r($out);
-$output = $out[0];
-          $result = explode("}", $output);
-          if(isset($result[3]))
-          {
-            $t1 = $result[0];
-            $t2 = $result[3];
-            $t3 = $result[7];
-            $t4 = $result[10];
-            $result[0] = $t1;
-            $result[3] = $t2;
-            $result[7] = $t3;
-            $result[10] = $t4;
+
+            shell_exec($command);
+            $output=shell_exec($out);
+            $result = explode("}", $output);
+            $result[0] *= 1000000;
+            $result[3] *= 1000000;
+            $result[7] *= 1000000;
             $min = $result[0];
             $result[12] = "Kruskal Algorithm";
             if($min>$result[3])
             {
               $min = $result[3];
               $result[12] = "Prims Algorithm";
-              if($min>$result[7])
-              {
-                $min = $result[7];
-                $result[12] = "Boruvka Algorithm";
-                if($min>$result[10])
-                {
-                  $result[12] = "Reverse Kruskal(Delete) Algorithm";
-                }
-              }
+
             }
-          }
+            if($min>$result[7])
+            {
+              $result[12] = "Reverse Kruskal(Delete) Algorithm";
+            }
 
 
 
@@ -144,11 +130,11 @@ function redirect($url) {
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/files/bootstrap.css">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/files/jquery.js"></script>
 
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="/files/bootstrap.js"></script>
 
     </head>
 
@@ -282,7 +268,7 @@ function redirect($url) {
 
             <div class="alert alert-success">
 
-                <strong>Fastest Algo For The Problem : <?php echo $result[12]; ?></strong>
+                <strong>Fastest Algo For The Problem : <?php echo $result[12] ?></strong>
 
   </div>
 
@@ -306,7 +292,7 @@ function redirect($url) {
 
         <th>Algorithm</th>
 
-        <th>Time Complexity(in second)</th>
+        <th>Time Complexity(in microsecond)</th>
 
         <th>Cost</th>
 
@@ -341,7 +327,7 @@ function redirect($url) {
 
         <td><?php echo $result[3]; ?></td>
 
-        <td><?php echo $result[5]; ?></td>
+        <td><?php echo $result[2]; ?></td>
 
       </tr>
 
@@ -352,26 +338,11 @@ function redirect($url) {
 
         <td>3</td>
 
-        <td>Boruvka</td>
+        <td>Reverse Kruskal(Delete)</td>
 
         <td><?php echo $result[7]; ?></td>
 
         <td><?php echo $result[8]; ?></td>
-
-      </tr>
-
-    </tbody>
-    <tbody>
-
-      <tr>
-
-        <td>4</td>
-
-        <td>Reverse Kruskal(Delete)</td>
-
-        <td><?php echo $result[10]; ?></td>
-
-        <td><?php echo $result[11]; ?></td>
 
       </tr>
 
@@ -446,22 +417,9 @@ function redirect($url) {
 
             <td>3</td>
 
-            <td>Boruvka</td>
-
-            <td><?php echo $result[6]; ?></td>
-
-          </tr>
-
-        </tbody>
-        <tbody>
-
-          <tr>
-
-            <td>4</td>
-
             <td>Reverse Kruskal(Delete)</td>
 
-            <td><?php echo $result[9]; ?></td>
+            <td><?php echo $result[6]; ?></td>
 
           </tr>
 
